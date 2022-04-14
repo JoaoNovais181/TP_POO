@@ -42,13 +42,13 @@ public class SmartSpeaker extends SmartDevice {
         this.volume = 0;
     }
 
-    public SmartSpeaker(String cod, String channel, int i) {
-        super(cod);
+    public SmartSpeaker(String cod, String channel, int volume) {
+        super(cod, true);
         // initialise instance variables
         this.channel = channel;
-        if (i<0) this.volume=0;
-        else if (i>MAX) this.volume = MAX;
-        else this.volume = i;
+        if (volume<0) this.volume=0;
+        else if (volume>MAX) this.volume = MAX;
+        else this.volume = volume;
     }
 
     public void volumeUp() {
@@ -65,6 +65,10 @@ public class SmartSpeaker extends SmartDevice {
     
     public void setChannel(String c) {this.channel=c;}
 
-    
+    @Override
+    public String toString ()
+    {
+        return "SmarSpeaker{id: " + this.getID() + ", on=" + this.getOn() + ", Channel: " + this.channel + ", Volume: " + this.volume + "}"; 
+    }
 
 }

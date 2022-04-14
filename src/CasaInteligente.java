@@ -25,30 +25,84 @@ import java.util.ArrayList;
  */
 public class CasaInteligente {
 
-    private String morada;
+    private String nomeProprietario, NIFproprietario;
     private Map<String, SmartDevice> devices; // identificador -> SmartDevice
     private Map<String, List<String>> locations; // Espaço -> Lista codigo dos devices
+    private Fornecedor fornecedor;
 
     /**
      * Constructor for objects of class CasaInteligente
      */
     public CasaInteligente() {
         // initialise instance variables
-        this.morada = "";
-        this.devices = new HashMap();
-        this.locations = new HashMap();
+        this.nomeProprietario = "";
+        this.NIFproprietario = "";
+        this.devices = new HashMap<>();
+        this.locations = new HashMap<>();
+        this.fornecedor = null;
     }
 
-    public CasaInteligente(String morada) {
+    public CasaInteligente(String nomeProprietario, String NIFproprietario, Fornecedor fornecedor) {
         // initialise instance variables
-        this.morada = morada;
-        this.devices = new HashMap();
-        this.locations = new HashMap();
+        this.nomeProprietario = nomeProprietario;
+        this.NIFproprietario = NIFproprietario;
+        this.devices = new HashMap<>();
+        this.locations = new HashMap<>();
+        this.fornecedor = fornecedor;
+        fornecedor.addCasa(this);
     }
 
-    public String getMorada ()
+    public CasaInteligente(CasaInteligente umaCasaInteligente)
     {
-        return this.morada;
+        this.nomeProprietario = umaCasaInteligente.getNomeProprietario();
+        this.NIFproprietario = umaCasaInteligente.getNIFproprietario();
+        this.devices = new HashMap<>();
+        this.devices = (HashMap<String, SmartDevice>) umaCasaInteligente.getDevices().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey() , entry -> entry.getValue()));
+        this.locations = new HashMap<>();   
+        this.locations = (HashMap<String, List<String>>) umaCasaInteligente.getLocations().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue()));
+    }
+
+    public String getNomeProprietario ()
+    {
+        return this.nomeProprietario;
+    }
+
+    public String getNIFproprietario ()
+    {
+        return this.NIFproprietario;
+    }
+
+    public HashMap<String, SmartDevice> getDevices ()
+    {
+        return (HashMap<String, SmartDevice>) this.devices.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+    }
+
+    public HashMap<String, List<String>> getLocations ()
+    {
+        return (HashMap<String, List<String>>) this.locations.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+    }
+
+    public Fornecedor getFornecedor ()
+    {
+        return this.fornecedor;
+    }
+
+    // public CasaInteligente clone ()
+    // {
+        // return new CasaInteligente(this);
+    // }
+
+    public String toString ()
+    {
+        return "CasaInteligente{Nome: " + this.nomeProprietario + ", NIF: " + this.NIFproprietario + "}";
+    }
+    
+
+    public void mudaFornecedor (Fornecedor novoFornecedor)
+    {
+        this.fornecedor.removeCasa(this);
+        novoFornecedor.addCasa(this);
+        this.fornecedor = novoFornecedor;
     }
 
     
@@ -97,6 +151,11 @@ public class CasaInteligente {
         {
             List<String> dev = this.locations.get(s1);
             dev.add(s2);
+        }
+        else
+        {
+            this.addRoom(s1);
+            this.addToRoom(s1, s2);
         }
     }
     

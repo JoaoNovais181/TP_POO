@@ -17,7 +17,7 @@
  * @author (your name)
  * @version (a version number or a date)
  */
-public class SmartDevice {
+public abstract class SmartDevice {
 
     private String id;
     private boolean on;
@@ -40,6 +40,12 @@ public class SmartDevice {
         this.on = b;
     }
 
+    public SmartDevice(SmartDevice sd)
+    {
+        this.id = sd.getID();
+        this.on = sd.getOn();
+    }
+
     public void turnOn() {
         this.on = true;
     }
@@ -47,6 +53,11 @@ public class SmartDevice {
     public void turnOff() {
         this.on = false;
     }
+
+    // public abstract SmartDevice clone ();
+    // {
+    //     return new SmartDevice(this);
+    // }
     
     public boolean getOn() {return this.on;}
     
@@ -54,9 +65,9 @@ public class SmartDevice {
     
     public String getID() {return this.id;}
 
-    public String toString ()
-    {
-        return "SmartDevice{" + "id='" + id + ", on=" + on + "}";
-    }
+    public abstract String toString();
+    // {
+        // return "SmartDevice{" + "id='" + id + ", on=" + on + "}";
+    // }
 
 }

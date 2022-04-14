@@ -34,13 +34,13 @@ public class SmartBulb extends SmartDevice {
     }
 
     public SmartBulb(String id, int tone) {
-        super(id);
+        super(id, true);
         // initialise instance variables
         this.tone = tone;
     }
 
     public SmartBulb(String id) {
-        super(id); // Chamar o construtor de SmartDevice parametrizado com id
+        super(id, false); // Chamar o construtor de SmartDevice parametrizado com id
         // initialise instance variables
         this.tone = NEUTRAL;
     }
@@ -57,7 +57,7 @@ public class SmartBulb extends SmartDevice {
 
     public String toString ()
     {
-        return super.toString() + "tone: " + this.tone;
+        return "SmartBulb{id: " + this.getID() + ", on=" + this.getOn() + ", tone=" + ((this.tone==1) ?"Neutral" :(this.tone > 1) ?"WARM" : "COLD") + "}";
     }
 
 }
