@@ -2,6 +2,7 @@ package Controler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import Model.CasaInteligente;
 import Model.Fornecedor;
@@ -22,8 +23,24 @@ public class ControladorCasa {
         List<String> l = g.getNIFCasas();
         a.printMenuSelecaoCasa(l);
         int op = (int)this.i.lerDouble(a, "Introduza uma opcao", 0);
-        if (op>0) return l.get(op);
+        if (op>0) return l.get(op-1);
         return null;
+    }
+
+    public String lerLocation (GesModel g, Apresentacao a, String nif)
+    {
+        CasaInteligente c = g.getCasa(nif);
+        List<String> l = c.getLocations().keySet().stream().collect(Collectors.toList());
+        a.printMenuSelecaoLocation(l);
+        int op = (int)this.i.lerDouble(a, "Introduza uma opcao:", 0);
+        if (op>0) return l.get(op-1);
+        String loc;
+        do
+        {
+            loc = this.i.lerString(a, "Introduza o nome da Sala: ");
+        } while(l.contains(loc));
+        c.addRoom(loc);
+        return loc;
     }
 
     public void listarCasas (GesModel g, Apresentacao a)

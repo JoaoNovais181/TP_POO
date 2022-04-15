@@ -28,7 +28,6 @@ public class Controlador {
         if (op == 1)
         {
             this.controladorCriacao(g, a);
-
         }
     }
 
@@ -51,6 +50,7 @@ public class Controlador {
         {
             nifCasa = this.controladorCriacaoCasa(g, a);
         }
+        String location = this.ca.lerLocation(g, a, nifCasa);
         a.printMenuSelecaoTipoSmartDevice();
         int type = (int)this.i.lerDouble(a, "Selecione uma opcao: ", 0, 2);
         switch (type)

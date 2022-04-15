@@ -54,6 +54,11 @@ public class Apresentacao {
 
     public void printMenuSelecaoTipoSmartDevice ()
     {
-        this.o.printMenu((new String[]{"SmartBulb", "SmartSpeaker", "SmartCamera"}), "Selecione o tipo de Smart Device", 3);
+        this.o.printMenu((new String[]{"SmartBulb", "SmartSpeaker", "SmartCamera"}), "Selecione o tipo de Smart Device", -1);
+    }
+
+    public void printMenuSelecaoLocation (List<String> l)
+    {
+        this.o.printList(l, "Selecione uma Sala", 2);
     }
 }
