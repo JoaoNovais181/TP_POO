@@ -1,3 +1,7 @@
+package Model;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 /*********************************************************************************/
 /** DISCLAIMER: Este código foi criado e alterado durante as aulas práticas      */
 /** de POO. Representa uma solução em construção, com base na matéria leccionada */ 
@@ -42,8 +46,17 @@ public class SmartSpeaker extends SmartDevice {
         this.volume = 0;
     }
 
-    public SmartSpeaker(String cod, String channel, int volume) {
-        super(cod, true);
+    public SmartSpeaker(String cod, boolean on, String channel, int volume) {
+        super(cod, on);
+        // initialise instance variables
+        this.channel = channel;
+        if (volume<0) this.volume=0;
+        else if (volume>MAX) this.volume = MAX;
+        else this.volume = volume;
+    }
+
+    public SmartSpeaker(String cod, boolean on, String channel, int volume, LocalDateTime ultimaFaturacao) {
+        super(cod, on, ultimaFaturacao);
         // initialise instance variables
         this.channel = channel;
         if (volume<0) this.volume=0;
@@ -69,6 +82,16 @@ public class SmartSpeaker extends SmartDevice {
     public String toString ()
     {
         return "SmarSpeaker{id: " + this.getID() + ", on=" + this.getOn() + ", Channel: " + this.channel + ", Volume: " + this.volume + "}"; 
+    }
+
+    @Override
+    public double calculaConsumo(LocalDateTime data) 
+    {
+        if (data.isBefore(this.getUltimaFaturacao()))
+            return -1;
+        
+        double horas = ChronoUnit.HOURS.between(this.getUltimaFaturacao(), data);
+        return horas * (this.volume/5) * 0.15 ;
     }
 
 }

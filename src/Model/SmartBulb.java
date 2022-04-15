@@ -1,3 +1,7 @@
+package Model;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 /*********************************************************************************/
 /** DISCLAIMER: Este código foi criado e alterado durante as aulas práticas      */
 /** de POO. Representa uma solução em construção, com base na matéria leccionada */ 
@@ -33,8 +37,14 @@ public class SmartBulb extends SmartDevice {
         this.tone = NEUTRAL;
     }
 
-    public SmartBulb(String id, int tone) {
+    public SmartBulb(String id, boolean on, int tone) {
         super(id, true);
+        // initialise instance variables
+        this.tone = tone;
+    }
+
+    public SmartBulb(String id, boolean on, int tone, LocalDateTime ultimaFaturacao) {
+        super(id, true, ultimaFaturacao);
         // initialise instance variables
         this.tone = tone;
     }
@@ -60,5 +70,14 @@ public class SmartBulb extends SmartDevice {
         return "SmartBulb{id: " + this.getID() + ", on=" + this.getOn() + ", tone=" + ((this.tone==1) ?"Neutral" :(this.tone > 1) ?"WARM" : "COLD") + "}";
     }
 
+    @Override
+    public double calculaConsumo (LocalDateTime data)
+    {
+        if (data.isBefore(this.getUltimaFaturacao()))
+            return -1;
+        
+        double horas = ChronoUnit.HOURS.between(this.getUltimaFaturacao(), data);
+        return (1.1 - (this.tone+1)*0.3) * horas;
+    }
 }
 

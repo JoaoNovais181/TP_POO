@@ -1,3 +1,4 @@
+package Model;
 /*********************************************************************************/
 /** DISCLAIMER: Este código foi criado e alterado durante as aulas práticas      */
 /** de POO. Representa uma solução em construção, com base na matéria leccionada */ 
@@ -11,8 +12,10 @@
 
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import java.util.List;
 import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 
@@ -29,27 +32,28 @@ public class CasaInteligente {
     private Map<String, SmartDevice> devices; // identificador -> SmartDevice
     private Map<String, List<String>> locations; // Espaço -> Lista codigo dos devices
     private Fornecedor fornecedor;
+    private double valorUltimaFaturacao;
 
     /**
      * Constructor for objects of class CasaInteligente
      */
     public CasaInteligente() {
-        // initialise instance variables
         this.nomeProprietario = "";
         this.NIFproprietario = "";
         this.devices = new HashMap<>();
         this.locations = new HashMap<>();
         this.fornecedor = null;
+        this.valorUltimaFaturacao = 0;
     }
 
     public CasaInteligente(String nomeProprietario, String NIFproprietario, Fornecedor fornecedor) {
-        // initialise instance variables
         this.nomeProprietario = nomeProprietario;
         this.NIFproprietario = NIFproprietario;
         this.devices = new HashMap<>();
         this.locations = new HashMap<>();
         this.fornecedor = fornecedor;
         fornecedor.addCasa(this);
+        this.valorUltimaFaturacao = 0;
     }
 
     public CasaInteligente(CasaInteligente umaCasaInteligente)
@@ -60,6 +64,7 @@ public class CasaInteligente {
         this.devices = (HashMap<String, SmartDevice>) umaCasaInteligente.getDevices().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey() , entry -> entry.getValue()));
         this.locations = new HashMap<>();   
         this.locations = (HashMap<String, List<String>>) umaCasaInteligente.getLocations().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue()));
+        this.valorUltimaFaturacao = 0;
     }
 
     public String getNomeProprietario ()
@@ -87,10 +92,10 @@ public class CasaInteligente {
         return this.fornecedor;
     }
 
-    // public CasaInteligente clone ()
-    // {
-        // return new CasaInteligente(this);
-    // }
+    public double getValorUltimaFaturacao ()
+    {
+        return this.valorUltimaFaturacao;
+    }
 
     public String toString ()
     {
@@ -105,7 +110,19 @@ public class CasaInteligente {
         this.fornecedor = novoFornecedor;
     }
 
-    
+    public double calculaCosumo (LocalDateTime data)
+    {
+        return this.devices.values().stream().collect(Collectors.summingDouble(smartdevice->smartdevice.calculaConsumo(data)));
+    }
+
+    public double calculaFaturacao (LocalDateTime data)
+    {
+        double consumo = this.calculaCosumo(data);
+        double faturacao = this.fornecedor.faturacao(consumo, this.devices.size());
+        this.valorUltimaFaturacao = faturacao;
+        return faturacao;
+    }
+
     public void setDeviceOn(String devCode) {
         this.devices.get(devCode).turnOn();
     }
@@ -145,18 +162,33 @@ public class CasaInteligente {
         return this.locations.keySet().stream().anyMatch(key -> s.equals(key));
     }
     
-    public void addToRoom (String s1, String s2) 
+    public void addToRoom (String room, String sdID) 
     {
-        if (this.hasRoom(s1))
+        if (this.hasRoom(room))
         {
-            List<String> dev = this.locations.get(s1);
-            dev.add(s2);
+            List<String> dev = this.locations.get(room);
+            dev.add(sdID);
         }
         else
         {
-            this.addRoom(s1);
-            this.addToRoom(s1, s2);
+            this.addRoom(room);
+            this.addToRoom(room, sdID);
         }
+    }
+
+    public void addToRoom (String room, SmartDevice sd)
+    {
+        if (this.hasRoom(room))
+        {
+            List<String> dev = this.locations.get(room);
+            dev.add(sd.getID());
+        }
+        else
+        {
+            this.addRoom(room);
+            this.addToRoom(room, sd.getID());
+        }
+        this.devices.put(sd.getID(), sd);
     }
     
     public boolean roomHasDevice (String s1, String s2) 

@@ -1,3 +1,6 @@
+package Model;
+import java.time.LocalDateTime;
+
 /*********************************************************************************/
 /** DISCLAIMER: Este código foi criado e alterado durante as aulas práticas      */
 /** de POO. Representa uma solução em construção, com base na matéria leccionada */ 
@@ -21,6 +24,7 @@ public abstract class SmartDevice {
 
     private String id;
     private boolean on;
+    private LocalDateTime ultimaFaturacao;
 
     /**
      * Constructor for objects of class SmartDevice
@@ -28,22 +32,32 @@ public abstract class SmartDevice {
     public SmartDevice() {
         this.id = "";
         this.on = false;
+        this.ultimaFaturacao = LocalDateTime.now();
     }
 
     public SmartDevice(String s) {
         this.id = s;
         this.on = false;
+        this.ultimaFaturacao = LocalDateTime.now();
     }
 
     public SmartDevice(String s, boolean b) {
         this.id = s;
         this.on = b;
+        this.ultimaFaturacao = LocalDateTime.now();
+    }
+
+    public SmartDevice(String s, boolean b, LocalDateTime ultimaFaturacao) {
+        this.id = s;
+        this.on = b;
+        this.ultimaFaturacao = ultimaFaturacao;
     }
 
     public SmartDevice(SmartDevice sd)
     {
         this.id = sd.getID();
         this.on = sd.getOn();
+        this.ultimaFaturacao = sd.getUltimaFaturacao();
     }
 
     public void turnOn() {
@@ -54,10 +68,14 @@ public abstract class SmartDevice {
         this.on = false;
     }
 
+    public abstract double calculaConsumo (LocalDateTime data);
+
     // public abstract SmartDevice clone ();
     // {
     //     return new SmartDevice(this);
     // }
+
+    public LocalDateTime getUltimaFaturacao () {return this.ultimaFaturacao;}
     
     public boolean getOn() {return this.on;}
     

@@ -1,3 +1,4 @@
+package Model;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -68,5 +69,13 @@ public class Fornecedor {
         this.casas.remove(casa.getNIFproprietario());
     }
 
+    public double faturacao (double consumoTotal, int numeroDispositivos)
+    {
+        if (numeroDispositivos < 10)
+            return 0.6*(1+this.imposto)*valorBase*consumoTotal;
+        if (numeroDispositivos<20)
+            return 0.75*(1+this.imposto)*this.valorBase*consumoTotal;
+        return 0.9*(1+this.imposto)*this.valorBase*consumoTotal;
+    }
 
 }
