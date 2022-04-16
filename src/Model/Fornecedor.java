@@ -2,8 +2,10 @@ package Model;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.io.Serializable;
 
-public class Fornecedor {
+public class Fornecedor implements Serializable
+{
 
     private String nome;
     private double valorBase, imposto;
@@ -76,6 +78,11 @@ public class Fornecedor {
         if (numeroDispositivos<20)
             return 0.75*(1+this.imposto)*this.valorBase*consumoTotal;
         return 0.9*(1+this.imposto)*this.valorBase*consumoTotal;
+    }
+
+    public String toString() 
+    {
+        return "Fornecedor{ nome: " + this.nome + ", valor base=" + this.valorBase + ", imposto=" + this.imposto + "}";
     }
 
 }

@@ -5,7 +5,8 @@ import java.io.*;
  *  This class saves the state of any given serializable object in to a given file.
  */
 
-public class Load_Save {
+public class Load_Save implements Serializable
+{
     private File file;
 
     /* Class constructors*/
@@ -15,13 +16,22 @@ public class Load_Save {
     public Load_Save() {
         this.file = new File("input_files/saveState.txt");
         try {
-            file.createNewFile();
+            this.file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     public Load_Save(String file) {
         this.file = new File(file);
+        boolean exists = this.file.exists();
+        if (!exists)
+        {
+            try {
+                this.file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /* Getters and Setters*/

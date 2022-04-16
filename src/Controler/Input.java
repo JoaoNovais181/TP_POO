@@ -1,10 +1,12 @@
 package Controler;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
 import View.Apresentacao;
 
-public class Input {
+public class Input implements Serializable
+{
 
     Scanner sc;
 
@@ -19,7 +21,7 @@ public class Input {
         do
         {
             a.printMessage(message);
-            s = sc.nextLine();
+            s = this.sc.nextLine();
         } while (s==null || s.isBlank());
         return s;
     }

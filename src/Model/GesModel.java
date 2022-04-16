@@ -3,16 +3,18 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.io.Serializable;
 
+public class GesModel implements Serializable {
 
-public class GesModel {
-
+    private HashMap<String, SmartDevice> devices;
     private HashMap<String, CasaInteligente> casas;
     private HashMap<String, Fornecedor> fornecedores;
     private LocalDateTime horaAtual;
 
     public GesModel ()
     {
+        this.devices = new HashMap<>();
         this.casas = new HashMap<>();
         this.fornecedores = new HashMap<>();
         this.horaAtual = LocalDateTime.now();
@@ -20,6 +22,7 @@ public class GesModel {
 
     public GesModel (LocalDateTime t)
     {
+        this.devices = new HashMap<>();
         this.casas = new HashMap<>();
         this.fornecedores = new HashMap<>();
         this.horaAtual = t;
@@ -54,11 +57,22 @@ public class GesModel {
         return this.casas.size();
     }
 
+    public List<CasaInteligente> getCasas ()
+    {
+        return this.casas.values().stream().collect(Collectors.toList());
+    }
+
+    public List<String> getNIFCasas ()
+    {
+        return this.casas.keySet().stream().collect(Collectors.toList());
+    }
+
     //                  Smart Device
 
     public void addSmartDevice (SmartDevice sd, String NIFproprietario, String location)
     {
         this.casas.get(NIFproprietario).addToRoom(location, sd);
+        this.devices.put(sd.getID(), sd);
     }
 
     public SmartDevice getSmartDevice (String id, String NIFproprietario)
@@ -71,14 +85,15 @@ public class GesModel {
         return this.casas.get(NIFproprietario).existsDevice(id);
     }
 
-    public List<CasaInteligente> getCasas ()
+    public boolean existeDevice (String id)
     {
-        return this.casas.values().stream().collect(Collectors.toList());
+        return this.devices.containsKey(id);
     }
 
-    public List<String> getNIFCasas ()
+
+    public List<SmartDevice> getDevices ()
     {
-        return this.casas.keySet().stream().collect(Collectors.toList());
+        return this.devices.values().stream().collect(Collectors.toList());
     }
 
     //                   Fornecedor
@@ -113,12 +128,18 @@ public class GesModel {
         return this.fornecedores.get(nome);
     }
 
+    public List<Fornecedor> getFornecedores ()
+    {
+        return this.fornecedores.values().stream().collect(Collectors.toList());
+    }
+
     //                       Outros
 
     public void calclulaFaturacao (LocalDateTime data)
     {
         for (CasaInteligente ci : this.casas.values())
-            ci.calculaFaturacao(data);
+            ci.calculaFaturacao(this.horaAtual, data);
+        this.horaAtual = data;
     }
 
 

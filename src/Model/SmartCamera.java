@@ -2,7 +2,7 @@ package Model;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-public class SmartCamera extends SmartDevice
+public class SmartCamera extends SmartDevice 
 {
     private int resX, resY;
     private double tamFicheiro;
@@ -23,13 +23,13 @@ public class SmartCamera extends SmartDevice
         this.tamFicheiro = tamFicheiro;
     }
 
-    public SmartCamera (String id, boolean on, LocalDateTime ultimaFaturacao, int resX, int resY, double tamFicheiro)
-    {
-        super(id, on, ultimaFaturacao);
-        this.resX = resX;
-        this.resY = resY;
-        this.tamFicheiro = tamFicheiro;
-    }
+    // public SmartCamera (String id, boolean on, LocalDateTime ultimaFaturacao, int resX, int resY, double tamFicheiro)
+    // {
+        // super(id, on, ultimaFaturacao);
+        // this.resX = resX;
+        // this.resY = resY;
+        // this.tamFicheiro = tamFicheiro;
+    // }
 
 
     public int getResX ()
@@ -48,11 +48,11 @@ public class SmartCamera extends SmartDevice
     }
 
     @Override
-    public double calculaConsumo(LocalDateTime data) {
-        if (data.isBefore(this.getUltimaFaturacao()))
+    public double calculaConsumo(LocalDateTime atual, LocalDateTime nova) {
+        if (nova.isBefore(atual))
             return -1;
         
-        double horas = ChronoUnit.HOURS.between(this.getUltimaFaturacao(), data);
+        double horas = ChronoUnit.HOURS.between(atual, nova);
         return horas * this.tamFicheiro * 0.0000001 * this.resX + this.resY;
     }
 

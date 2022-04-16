@@ -1,7 +1,10 @@
 
 package View;
 
-public class ApresentacaoMain {
+import java.io.Serializable;
+
+public class ApresentacaoMain implements Serializable
+{
 
     private Output o;
 
@@ -12,7 +15,8 @@ public class ApresentacaoMain {
 
     public void printMainMenu ()
     {
-        o.printMenu((new String[]{"Criar", "Apresentar Faturas"}), "Menu Principal", 0);
+        o.printMenu((new String[]{"Criar", "Listar SmartDevices", "Listar Casas Inteligentes", "Listar Fornecedores", "Apresentar Hora Atual", "Salvar Estado Atual", "Carregar estado"}), 
+                            "Menu Principal", 0);
     }
     
     public void printMenuCriacao ()

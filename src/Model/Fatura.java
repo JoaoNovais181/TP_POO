@@ -1,7 +1,9 @@
 package Model;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Fatura {
+public class Fatura implements Serializable
+{
 
     private LocalDateTime inicio, fim;
     private double consumo, custo;

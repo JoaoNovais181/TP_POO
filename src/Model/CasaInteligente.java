@@ -1,42 +1,25 @@
 package Model;
-/*********************************************************************************/
-/** DISCLAIMER: Este código foi criado e alterado durante as aulas práticas      */
-/** de POO. Representa uma solução em construção, com base na matéria leccionada */ 
-/** até ao momento da sua elaboração, e resulta da discussão e experimentação    */
-/** durante as aulas. Como tal, não deverá ser visto como uma solução canónica,  */
-/** ou mesmo acabada. É disponibilizado para auxiliar o processo de estudo.      */
-/** Os alunos são encorajados a testar adequadamente o código fornecido e a      */
-/** procurar soluções alternativas, à medida que forem adquirindo mais           */
-/** conhecimentos de POO.                                                        */
-/*********************************************************************************/
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import java.util.List;
 import java.util.HashMap;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 
-/**
- * A CasaInteligente faz a gestão dos SmartDevices que existem e dos 
- * espaços (as salas) que existem na casa.
- *
- * @author (your name)
- * @version (a version number or a date)
- */
-public class CasaInteligente {
+public class CasaInteligente implements Serializable
+{
 
     private String nomeProprietario, NIFproprietario;
     private Map<String, SmartDevice> devices; // identificador -> SmartDevice
     private Map<String, List<String>> locations; // Espaço -> Lista codigo dos devices
     private Fornecedor fornecedor;
     private double valorUltimaFaturacao;
+    private List<Fatura> faturas;
 
-    /**
-     * Constructor for objects of class CasaInteligente
-     */
     public CasaInteligente() {
         this.nomeProprietario = "";
         this.NIFproprietario = "";
@@ -44,6 +27,7 @@ public class CasaInteligente {
         this.locations = new HashMap<>();
         this.fornecedor = null;
         this.valorUltimaFaturacao = 0;
+        this.faturas = new ArrayList<>();
     }
 
     public CasaInteligente(String nomeProprietario, String NIFproprietario, Fornecedor fornecedor) {
@@ -54,6 +38,7 @@ public class CasaInteligente {
         this.fornecedor = fornecedor;
         fornecedor.addCasa(this);
         this.valorUltimaFaturacao = 0;
+        this.faturas = new ArrayList<>();
     }
 
     public CasaInteligente(CasaInteligente umaCasaInteligente)
@@ -65,6 +50,8 @@ public class CasaInteligente {
         this.locations = new HashMap<>();   
         this.locations = (HashMap<String, List<String>>) umaCasaInteligente.getLocations().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue()));
         this.valorUltimaFaturacao = 0;
+        this.faturas = new ArrayList<>();
+        this.faturas = umaCasaInteligente.getFaturas();
     }
 
     public String getNomeProprietario ()
@@ -97,6 +84,11 @@ public class CasaInteligente {
         return this.valorUltimaFaturacao;
     }
 
+    public List<Fatura> getFaturas ()
+    {
+        return this.faturas;
+    }
+
     public String toString ()
     {
         return "CasaInteligente{Nome: " + this.nomeProprietario + ", NIF: " + this.NIFproprietario + "}";
@@ -110,16 +102,18 @@ public class CasaInteligente {
         this.fornecedor = novoFornecedor;
     }
 
-    public double calculaCosumo (LocalDateTime data)
+    public double calculaCosumo (LocalDateTime atual, LocalDateTime nova)
     {
-        return this.devices.values().stream().collect(Collectors.summingDouble(smartdevice->smartdevice.calculaConsumo(data)));
+        return this.devices.values().stream().collect(Collectors.summingDouble(smartdevice->smartdevice.calculaConsumo(atual, nova)));
     }
 
-    public double calculaFaturacao (LocalDateTime data)
+    public double calculaFaturacao (LocalDateTime atual, LocalDateTime nova)
     {
-        double consumo = this.calculaCosumo(data);
+        double consumo = this.calculaCosumo(atual, nova);
         double faturacao = this.fornecedor.faturacao(consumo, this.devices.size());
         this.valorUltimaFaturacao = faturacao;
+        Fatura fatura = new Fatura(atual, nova, consumo, faturacao);
+        this.faturas.add(fatura);
         return faturacao;
     }
 
