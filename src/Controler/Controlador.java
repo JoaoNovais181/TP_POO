@@ -3,6 +3,7 @@ package Controler;
 import Model.*;
 import View.Apresentacao;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 
 public class Controlador implements Serializable
@@ -29,8 +30,9 @@ public class Controlador implements Serializable
         while (running)
         {
             int op;
+            a.clear();
             a.printMainMenu();
-            op = (int)i.lerDouble(a, "Introduza a opcao", 0, 7);
+            op = (int)i.lerDouble(a, "Introduza uma opcao:", 0, 5);
             switch (op)
             {
                 case 0:
@@ -41,22 +43,53 @@ public class Controlador implements Serializable
                     this.controladorCriacao(g, a);
                     break;
                 case 2:
-                    a.listarDevices(g);
+                    this.controladorFaturacao(g, a);
                     break;
                 case 3:
-                    a.listarCasasInteligentes(g);
+                    this.controladorListagem(g, a);
                     break;
                 case 4:
-                    a.listarFornecedores(g);
+                    a.printHoraAtual(g);
+                    a.printMessage(" 0 ) Voltar");
+                    op = (int)i.lerDouble(a, "Introduza uma opcao:", 0, 0);
                     break;
                 case 5:
-                    a.printHoraAtual(g);
+                    this.controladorEstado(g, a);
                     break;
-                case 6:
-                    this.ce.SalvarEstado(g,a);
+                default:
                     break;
-                case 7:
-                    g = this.ce.CarregarEstado(g, a);
+            }
+        }
+    }
+
+    public void controladorListagem (GesModel g, Apresentacao a)
+    {
+        boolean running = true;
+        while (running)
+        {
+            int op;
+            a.clear();
+            a.printMenuListagem();
+            op = (int)i.lerDouble(a, "Introduza uma opcao:", 0, 3);
+            switch(op)
+            {
+                case 0:
+                    running = false;
+                    break;
+                case 1:
+                    a.listarDevices(g);
+                    a.printMessage(" 0 ) Voltar");
+                    op = (int)i.lerDouble(a, "Introduza uma opcao:", 0, 0);
+                    break;
+                case 2:
+                    a.listarCasasInteligentes(g);
+                    a.printMessage(" 0 ) Voltar");
+                    op = (int)i.lerDouble(a, "Introduza uma opcao:", 0, 0);
+                    break;
+                case 3:
+                    a.listarFornecedores(g);
+                    a.printMessage(" 0 ) Voltar");
+                    op = (int)i.lerDouble(a, "Introduza uma opcao:", 0, 0);
                     break;
                 default:
                     break;
@@ -65,31 +98,91 @@ public class Controlador implements Serializable
     }
 
 
-
-
     public void controladorCriacao (GesModel g, Apresentacao a)
     {
-        a.printMenuCriacao();
-        int opc = (int)this.i.lerDouble(a, "Introduza uma opcao: ", 0, 3);
-        switch (opc) 
+        boolean running = true;
+        
+        while (running)
         {
-            case 0:
-                return;
-            case 1:
-                this.cs.controladorCriacaoSmartDevice(g, a, this.ca, this.cf);
-                break;
-            case 2:
-                this.ca.controladorCriacaoCasa(g, a, this.cf);
-                break;
-            case 3:
-                this.cf.criarFornecedor(g, a);
-                break;
-            default:
-                break;
+            a.clear();
+            a.printMenuCriacao();
+            int opc = (int)this.i.lerDouble(a, "Introduza uma opcao: ", 0, 3);
+            switch (opc) 
+            {
+                case 0:
+                    running = false;
+                    break;
+                case 1:
+                    this.cs.controladorCriacaoSmartDevice(g, a, this.ca, this.cf);
+                    break;
+                case 2:
+                    this.ca.controladorCriacaoCasa(g, a, this.cf);
+                    break;
+                case 3:
+                    this.cf.criarFornecedor(g, a);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
+    public void controladorEstado (GesModel g, Apresentacao a)
+    {
+        boolean running = true;
 
+        while (running)
+        {
+            a.clear();
+            a.printMenuEstado();
+            int opc = (int)this.i.lerDouble(a, "Introduza uma opcao:", 0, 2);
+            switch (opc)
+            {
+                case 0:
+                    running = false;
+                    break;
+                case 1:
+                    this.ce.SalvarEstado(g, a);
+                    break;
+                case 2:
+                    this.ce.CarregarEstado(g, a);
+                    break;
+            }
+        }
+    }
 
+    public void controladorFaturacao (GesModel g, Apresentacao a)
+    {
+        boolean running = true;
+
+        while (running)
+        {
+            a.clear();
+            a.printMenuFaturacao();
+            int opc = (int)this.i.lerDouble(a, "Introduza uma opcao:", 0, 3);
+            switch (opc)
+            {
+                case 0:
+                    running = false;
+                    break;
+                case 1:
+                    LocalDateTime d = this.ce.lerData(a);
+                    while (d.isBefore(g.getHoraAtual()))
+                    {
+                        a.printMessageWLineAbove("erro: Data inserida anterior à data atual do modelo.\n");
+                        d = this.ce.lerData(a);
+                    }
+                    g.calclulaFaturacao(d);
+                    break;
+                case 2:
+                    a.listarFaturas(g);
+                    opc = (int)i.lerDouble(a, "Introduza uma opcao:", 0, 0);
+                    break;
+                case 3:
+                default:
+                    break;
+            }
+        }
+    }
     
 }

@@ -65,7 +65,7 @@ public class SmartSpeaker extends SmartDevice
             return -1;
         
         double horas = ChronoUnit.HOURS.between(atual, nova);
-        return horas * (this.volume/5) * 0.15 ;
+        return horas * (1000 / (30-this.volume)) / 1000 ;
     }
 
 }

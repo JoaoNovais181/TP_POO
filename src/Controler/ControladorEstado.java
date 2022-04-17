@@ -2,10 +2,12 @@ package Controler;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import Model.GesModel;
 import View.Apresentacao;
 import Files.Load_Save;
-
 
 public class ControladorEstado implements Serializable
 {
@@ -45,5 +47,34 @@ public class ControladorEstado implements Serializable
             g2=g;
         }
         return g2;
+    }
+
+    private boolean verificaData (String data)
+    {
+        String[] tokens = data.split("[- :]");
+        if (tokens.length>5) return false;
+        for (int i=0 ; i<tokens.length ; i++)
+        {
+            try
+            {
+                Integer.parseInt(tokens[i]);
+            }
+            catch (NumberFormatException e)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public LocalDateTime lerData (Apresentacao a)
+    {
+        String s;
+        do{
+            s = this.i.lerString(a, "Introduza uma data no formato dd-MM-yyyy HH:mm: ");
+        } while(!this.verificaData(s));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        LocalDateTime data = LocalDateTime.parse(s, formatter);
+        return data;
     }
 }

@@ -42,6 +42,21 @@ public class Apresentacao implements Serializable
         this.am.printMenuCriacao();
     }
 
+    public void printMenuEstado() 
+    {
+        this.am.printMenuEstado();
+    }
+
+    public void printMenuListagem ()
+    {
+        this.am.printMenuListagem();
+    }
+
+    public void printMenuFaturacao ()
+    {
+        this.am.printMenuFaturacao();
+    }
+
     public void printMessage (String message)
     {
         this.o.printMessage(message);
@@ -81,18 +96,28 @@ public class Apresentacao implements Serializable
 
     public void listarDevices (GesModel g)
     {
+        this.o.clear();
         this.asd.listarDevices(g.getDevices());
     }
 
     public void listarFornecedores (GesModel g)
     {
+        this.o.clear();
         this.af.listarFornecedores(g.getFornecedores());
     }
 
     public void listarCasasInteligentes (GesModel g)
     {
+        this.o.clear();
         this.ac.listarCasasInteligentes(g.getCasas()); 
     }
+
+    public void listarFaturas (GesModel g)
+    {
+        this.o.clear();
+        this.ac.listarFaturas(g.getFaturas());
+    }
+
 
     public void printHoraAtual (GesModel g)
     {
@@ -100,5 +125,10 @@ public class Apresentacao implements Serializable
         this.o.printLine(hora.length()+2);
         this.o.printMessage(hora);
         this.o.printLine(hora.length()+2);
+    }
+
+    public void clear()
+    {
+        this.o.clear();
     }
 }

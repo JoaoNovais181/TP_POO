@@ -53,7 +53,7 @@ public class SmartCamera extends SmartDevice
             return -1;
         
         double horas = ChronoUnit.HOURS.between(atual, nova);
-        return horas * this.tamFicheiro * 0.0000001 * this.resX + this.resY;
+        return horas * this.tamFicheiro*8/1000000 * (this.resX * this.resY)/1000000 / 1000;
     }
 
     @Override

@@ -112,7 +112,7 @@ public class CasaInteligente implements Serializable
         double consumo = this.calculaCosumo(atual, nova);
         double faturacao = this.fornecedor.faturacao(consumo, this.devices.size());
         this.valorUltimaFaturacao = faturacao;
-        Fatura fatura = new Fatura(atual, nova, consumo, faturacao);
+        Fatura fatura = new Fatura(this.nomeProprietario, this.NIFproprietario, atual, nova, consumo, faturacao);
         this.faturas.add(fatura);
         return faturacao;
     }

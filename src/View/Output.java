@@ -9,7 +9,7 @@ public class Output implements Serializable
 
     public void clear ()
     {
-        for (int i=0 ; i<10 ; i++)
+        for (int i=0 ; i<15 ; i++)
             System.out.println("");
     }
 
@@ -35,6 +35,27 @@ public class Output implements Serializable
         {
             System.out.println(" " + i + " ) " + entrys[i-1] + " ");
         }
+
+        if (type==0)
+            System.out.println(" 0 ) Sair ");
+        else if (type==1)
+            System.out.println(" 0 ) Voltar ");
+        else if (type==2)
+            System.out.println(" 0 ) Criar Novo ");
+        printLine(maxSize);
+    }
+
+    public void printListO (List<Object> list, String message, int type)
+    {
+        int maxSize = message.length()+6;
+
+
+        printLine(maxSize);
+        System.out.println(message);
+        printLine(maxSize);
+
+        for (Object o : list)
+            System.out.println(o.toString());
 
         if (type==0)
             System.out.println(" 0 ) Sair ");

@@ -53,7 +53,7 @@ public class SmartBulb extends SmartDevice
             return -1;
         
         double horas = ChronoUnit.HOURS.between(atual, nova);
-        return (1.1 - (this.tone+1)*0.3) * horas;
+        return (10 + (4 - this.tone - 1) * 3) * horas / 1000;
     }
 }
 

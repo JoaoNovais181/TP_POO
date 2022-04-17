@@ -1,5 +1,6 @@
 package Model;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -96,6 +97,11 @@ public class GesModel implements Serializable {
         return this.devices.values().stream().collect(Collectors.toList());
     }
 
+    // private sortDevices ()
+    // {
+
+    // }
+
     //                   Fornecedor
 
     public void adicionarFornecedor (Fornecedor fornecedor)
@@ -140,6 +146,14 @@ public class GesModel implements Serializable {
         for (CasaInteligente ci : this.casas.values())
             ci.calculaFaturacao(this.horaAtual, data);
         this.horaAtual = data;
+    }
+
+    public List<Fatura> getFaturas()
+    {
+        List<Fatura> list = new ArrayList<>();
+        for (List<Fatura> l : this.casas.values().stream().map(CasaInteligente::getFaturas).collect(Collectors.toList()))
+            list.addAll(l);
+        return list;
     }
 
 

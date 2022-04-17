@@ -69,7 +69,7 @@ public class ControladorCasa implements Serializable
         String loc;
         do
         {
-            loc = this.i.lerString(a, "Introduza o nome da Sala: ");
+            loc = this.i.lerString(a, "Introduza o nome da Divisao: ");
         } while(this.verificaLocation(a, l, loc));
         c.addRoom(loc);
         return loc;

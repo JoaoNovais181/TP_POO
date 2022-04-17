@@ -19,13 +19,13 @@ public class App implements Serializable
         Controlador c = new Controlador();
         GesModel g;
         Load_Save l = new Load_Save("../input_files/default.dat");
-        try {
-            g=(GesModel)l.load();
-            c.controlador(g, a);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            try {
+                g=(GesModel)l.load();
+                c.controlador(g, a);
+            } catch (ClassNotFoundException | IOException e) {
+                a.printMessageWLineUnder("Erro ao abrir modelo default. A criar novo..");
+                g=new GesModel();
+                c.controlador(g, a);
+            }
     }
 }
