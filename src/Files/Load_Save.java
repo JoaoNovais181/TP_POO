@@ -59,7 +59,8 @@ public class Load_Save implements Serializable
             s = o.readObject();
             o.close();
         }else {
-            s = null;
+            in.close();
+            throw new IOException("Ficheiro Sem conteudo");
         }
         in.close();
         return s;

@@ -21,6 +21,12 @@ public class SmartBulb extends SmartDevice
         this.tone = tone;
     }
 
+    public SmartBulb(SmartBulb bulb)
+    {
+        super(bulb.getID(), bulb.getOn());
+        this.tone = bulb.getTone();
+    }
+
     // public SmartBulb(String id, boolean on, int tone, LocalDateTime ultimaFaturacao) {
         // super(id, true, ultimaFaturacao);
         // this.tone = tone;
@@ -54,6 +60,12 @@ public class SmartBulb extends SmartDevice
         
         double horas = ChronoUnit.HOURS.between(atual, nova);
         return (10 + (4 - this.tone - 1) * 3) * horas / 1000;
+    }
+
+    @Override
+    public SmartBulb clone ()
+    {
+        return new SmartBulb(this);
     }
 }
 

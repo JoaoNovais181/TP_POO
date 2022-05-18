@@ -30,6 +30,13 @@ public class SmartSpeaker extends SmartDevice
         else this.volume = volume;
     }
 
+    public SmartSpeaker (SmartSpeaker speaker)
+    {
+        super(speaker.getID(), speaker.getOn());
+        this.channel = speaker.getChannel();
+        this.volume = speaker.getVolume();
+    }
+
     // public SmartSpeaker(String cod, boolean on, String channel, int volume, LocalDateTime ultimaFaturacao) {
         // super(cod, on, ultimaFaturacao);
         // initialise instance variables
@@ -66,6 +73,12 @@ public class SmartSpeaker extends SmartDevice
         
         double horas = ChronoUnit.HOURS.between(atual, nova);
         return horas * (1000 / (30-this.volume)) / 1000 ;
+    }
+
+    @Override
+    public SmartSpeaker  clone() 
+    {
+        return new SmartSpeaker(this);
     }
 
 }

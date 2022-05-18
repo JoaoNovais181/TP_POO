@@ -14,8 +14,9 @@ public class CasaInteligente implements Serializable
 {
 
     private String nomeProprietario, NIFproprietario;
-    private Map<String, SmartDevice> devices; // identificador -> SmartDevice
-    private Map<String, List<String>> locations; // Espaço -> Lista codigo dos devices
+    private HashMap<String, SmartDevice> devices; // identificador -> SmartDevice
+    private HashMap<String, List<String>> locations; // Espaço -> Lista codigo dos devices
+    // private Map<String, Map <String, SmartDevice>> devices; 
     private Fornecedor fornecedor;
     private double valorUltimaFaturacao;
     private List<Fatura> faturas;
@@ -46,13 +47,14 @@ public class CasaInteligente implements Serializable
         this.nomeProprietario = umaCasaInteligente.getNomeProprietario();
         this.NIFproprietario = umaCasaInteligente.getNIFproprietario();
         this.devices = new HashMap<>();
-        this.devices = (HashMap<String, SmartDevice>) umaCasaInteligente.getDevices().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey() , entry -> entry.getValue()));
+        this.devices = (HashMap<String, SmartDevice>) umaCasaInteligente.getDevices().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey() , entry -> entry.getValue().clone()));
         this.locations = new HashMap<>();   
-        this.locations = (HashMap<String, List<String>>) umaCasaInteligente.getLocations().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue()));
+        this.locations =  (HashMap<String, List<String>>) umaCasaInteligente.getLocations().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry->entry.getValue().stream().collect(Collectors.toList())));
         this.valorUltimaFaturacao = 0;
         this.faturas = new ArrayList<>();
         this.faturas = umaCasaInteligente.getFaturas();
     }
+
 
     public String getNomeProprietario ()
     {
@@ -66,12 +68,12 @@ public class CasaInteligente implements Serializable
 
     public HashMap<String, SmartDevice> getDevices ()
     {
-        return (HashMap<String, SmartDevice>) this.devices.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+        return (HashMap<String, SmartDevice>) this.devices.entrySet().stream().collect(Collectors.toMap(entry->entry.getKey(), entry->entry.getValue()));
     }
 
     public HashMap<String, List<String>> getLocations ()
     {
-        return (HashMap<String, List<String>>) this.locations.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+        return (HashMap<String, List<String>>) this.locations.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().stream().collect(Collectors.toList())));
     }
 
     public Fornecedor getFornecedor ()
@@ -128,7 +130,7 @@ public class CasaInteligente implements Serializable
     
     public void addDevice(SmartDevice s) 
     {
-        this.devices.put(s.getID(), s);
+        this.devices.put(s.getID(), s.clone());
     }
     
     public SmartDevice getDevice(String s) 
@@ -182,7 +184,7 @@ public class CasaInteligente implements Serializable
             this.addRoom(room);
             this.addToRoom(room, sd.getID());
         }
-        this.devices.put(sd.getID(), sd);
+        this.devices.put(sd.getID(), sd.clone());
     }
     
     public boolean roomHasDevice (String s1, String s2) 

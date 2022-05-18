@@ -4,37 +4,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.io.Serializable;
 
-public class Fornecedor implements Serializable
+public abstract class Fornecedor implements Serializable
 {
 
     private String nome;
-    private double valorBase, imposto;
     private HashMap<String, CasaInteligente> casas;  // Considera-se como key o NIF do proprietario
-
-    public Fornecedor ()
-    {
-        this.nome = "";
-        this.valorBase = 0;
-        this.imposto = 0;
-        this.casas = new HashMap<String, CasaInteligente>();
-    }
+    private double valorBase, imposto;
 
     public Fornecedor (String nome, double valorBase, double imposto)
     {
         this.nome = nome;
         this.valorBase = valorBase;
         this.imposto = imposto;
-        this.casas = new HashMap<String, CasaInteligente>();
     }
-
-    public Fornecedor (Fornecedor umFornecedor)
-    {
-        this.nome = umFornecedor.getNome();
-        this.valorBase = umFornecedor.getValorBase();
-        this.imposto = umFornecedor.getImposto();
-        this.casas = (HashMap<String, CasaInteligente>) umFornecedor.getCasas().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry->entry.getValue()));
-    }
-
 
     public String getNome ()
     {
@@ -49,11 +31,6 @@ public class Fornecedor implements Serializable
     public double getImposto ()
     {
         return this.imposto;
-    }
-
-    public Fornecedor clone()
-    {
-        return new Fornecedor(this);
     }
 
     public HashMap<String, CasaInteligente> getCasas ()
@@ -71,18 +48,25 @@ public class Fornecedor implements Serializable
         this.casas.remove(casa.getNIFproprietario());
     }
 
-    public double faturacao (double consumoTotal, int numeroDispositivos)
-    {
-        if (numeroDispositivos < 10)
-            return 0.6*(1+this.imposto)*valorBase*consumoTotal;
-        if (numeroDispositivos<20)
-            return 0.75*(1+this.imposto)*this.valorBase*consumoTotal;
-        return 0.9*(1+this.imposto)*this.valorBase*consumoTotal;
-    }
+    public abstract double faturacao (double consumoTotal, int numeroDispositivos);
 
-    public String toString() 
-    {
-        return "Fornecedor{ nome: " + this.nome + ", valor base=" + this.valorBase + ", imposto=" + this.imposto + "}";
-    }
+    public abstract String toString(); 
+    // {
+        // String s = "Fornecedor{ nome: " + this.nome + ", valor base=" + this.getValorBase() + ", imposto=" + this.getImposto() + "\nformula= ";
+        // int nForms = this.formulas.size(), i=0;
+        // if (nForms > 1)
+        // {
+            // for (Map.Entry<Integer,Formula> formula : this.formulas.entrySet())
+            // {
+                // if (i++<nForms-1)
+                    // s += "\nse nº dispositivos <= " + formula.getKey() + ":\n\t" + formula.getValue();
+                // else
+                    // s += "\nse nº dispositivos > " + (formula.getKey()-1) + ":\n\t" + formula.getValue();
+            // }
+        // }
+        // else
+            // s += this.formulas.get(0).toString();
+        // return s + "}";
+    // }
 
 }

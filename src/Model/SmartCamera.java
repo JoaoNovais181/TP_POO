@@ -23,6 +23,14 @@ public class SmartCamera extends SmartDevice
         this.tamFicheiro = tamFicheiro;
     }
 
+    public SmartCamera (SmartCamera camera)
+    {
+        super(camera.getID(), camera.getOn());
+        this.resX = camera.getResX();
+        this.resY = camera.getResY();
+        this.tamFicheiro = camera.getTamFicheiro();
+    }
+
     // public SmartCamera (String id, boolean on, LocalDateTime ultimaFaturacao, int resX, int resY, double tamFicheiro)
     // {
         // super(id, on, ultimaFaturacao);
@@ -61,4 +69,9 @@ public class SmartCamera extends SmartDevice
         return "SmartCamera{id: " + this.getID() + ", on=" + this.getOn() + ", Resolution: " + this.resX + "x" + this.resY + ", File Size: " + this.tamFicheiro + "}"; 
     }
     
+    @Override
+    public SmartCamera  clone() 
+    {
+        return new SmartCamera(this);
+    }
 }

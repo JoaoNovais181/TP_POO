@@ -50,7 +50,7 @@ public class Controlador implements Serializable
                     break;
                 case 4:
                     a.printHoraAtual(g);
-                    a.printMessage(" 0 ) Voltar");
+                    a.printMessageWLineUnder(" 0 ) Voltar");
                     op = (int)i.lerDouble(a, "Introduza uma opcao:", 0, 0);
                     break;
                 case 5:
@@ -78,17 +78,17 @@ public class Controlador implements Serializable
                     break;
                 case 1:
                     a.listarDevices(g);
-                    a.printMessage(" 0 ) Voltar");
+                    a.printMessageWLineUnder(" 0 ) Voltar");
                     op = (int)i.lerDouble(a, "Introduza uma opcao:", 0, 0);
                     break;
                 case 2:
                     a.listarCasasInteligentes(g);
-                    a.printMessage(" 0 ) Voltar");
+                    a.printMessageWLineUnder(" 0 ) Voltar");
                     op = (int)i.lerDouble(a, "Introduza uma opcao:", 0, 0);
                     break;
                 case 3:
                     a.listarFornecedores(g);
-                    a.printMessage(" 0 ) Voltar");
+                    a.printMessageWLineUnder(" 0 ) Voltar");
                     op = (int)i.lerDouble(a, "Introduza uma opcao:", 0, 0);
                     break;
                 default:

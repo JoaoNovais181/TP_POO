@@ -35,12 +35,7 @@ public class ApresentacaoCasaInteligente implements Serializable
             this.o.printLine(msg.length()+2);
             return ;
         }
-        int maxSize = 0;
-        for (CasaInteligente casa : casas)
-        {
-            String str = casa.toString();
-            if (str.length()+4 > maxSize) maxSize = str.length()+4;
-        }
+        int maxSize = 60;
 
         this.o.printLine(maxSize);
         this.o.printMessage("Lista de Casas Inteligentes");

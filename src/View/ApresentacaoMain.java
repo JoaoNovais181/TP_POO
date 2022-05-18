@@ -39,4 +39,8 @@ public class ApresentacaoMain implements Serializable
         this.o.printMenu((new String[]{"Listar SmartDevices", "Listar Casas Inteligentes", "Listar Fornecedores"}), "Menu de Listagem", 1);
     }
 
+    public void printMenuCriacaoFormula ()
+    {
+        this.o.printMenu((new String[]{"Formula não condicional", "Formula condicional"}), "Qual tipo de formula pretende", -1);
+    }
 }

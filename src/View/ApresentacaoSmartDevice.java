@@ -40,12 +40,7 @@ public class ApresentacaoSmartDevice implements Serializable
             this.o.printLine(msg.length()+2);
             return ;
         }
-        int maxSize = 0;
-        for (SmartDevice device : devices)
-        {
-            String str = device.toString();
-            if (str.length()+4 > maxSize) maxSize = str.length()+4;
-        }
+        int maxSize = 60;
 
         this.o.printLine(maxSize);
         this.o.printMessage("Lista de SmartDevices");

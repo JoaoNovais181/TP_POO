@@ -8,16 +8,6 @@ public class Fatura implements Serializable
     private LocalDateTime inicio, fim;
     private double consumo, custo;
 
-    public Fatura ()
-    {
-        this.nomeProprietario = null;
-        this.NIFproprietario = null;
-        this.inicio = null;
-        this.fim = null;
-        this.consumo = 0;
-        this.custo = 0;
-    }
-
     public Fatura (String nomeProprietario, String NIFproprietario, LocalDateTime inicio, LocalDateTime fim, double consumo, double custo)
     {
         this.nomeProprietario = nomeProprietario;
@@ -51,11 +41,13 @@ public class Fatura implements Serializable
 
     public String toString ()
     {
+        String inicioStr = (this.inicio.getDayOfMonth() + "/" + this.inicio.getMonthValue() + "/" + this.inicio.getYear() + " " + this.inicio.getHour() + ":" + this.inicio.getMinute());
+        String fimStr = (this.fim.getDayOfMonth() + "/" + this.fim.getMonthValue() + "/" + this.fim.getYear() + " " + this.fim.getHour() + ":" + this.fim.getMinute());
         return "------------------------------------------------------------"+
                 "\nNome: " + this.nomeProprietario + "\nNIF: " + this.NIFproprietario +
-                "\nData inicial: " + this.inicio.toString() + "\nData final: " + 
-                this.fim.toString() + "\nConsumo Total: " + this.consumo + 
-                "\nCusto Total: " + this.custo +
+                "\nData inicial: " + inicioStr + "\nData final: " + 
+                fimStr + "\nConsumo Total: " + this.consumo + "kWh" +
+                "\nCusto Total: " + this.custo + "€" + 
                 "\n------------------------------------------------------------";
     }
 }

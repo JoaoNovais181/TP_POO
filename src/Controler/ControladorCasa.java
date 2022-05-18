@@ -96,11 +96,25 @@ public class ControladorCasa implements Serializable
         System.out.println(" 0 ) Criar nova");
     }
 
+    private boolean isNum (String str)
+    {
+        for (int i=0 ; i<str.length() ; i++)
+            if (str.charAt(i) < '0' || str.charAt(i) > '9') return false;
+        return true;
+    }
+
     private boolean verificaNIF (GesModel g, Apresentacao a, String nif)
     {
         boolean r = g.existeCasaInteligente(nif);
         if (r)
             a.printMessageWLineAbove("Já existe uma casa com esse NIF.");
+
+        if (nif.length() != 9 || !this.isNum(nif))
+        { 
+            a.printMessageWLineAbove("NIF deve ser constituido por 9 digitos");
+            r=true;
+        }
+        
         return r;
     }
 

@@ -61,4 +61,5 @@ public abstract class SmartDevice implements Serializable
 
     public abstract String toString();
 
+    public abstract SmartDevice clone();
 }

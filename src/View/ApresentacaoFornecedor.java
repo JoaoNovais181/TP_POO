@@ -28,18 +28,13 @@ public class ApresentacaoFornecedor implements Serializable
             this.o.printLine(msg.length()+2);
             return ;
         }
-        int maxSize = 0;
-        for (Fornecedor fornecedor : fornecedores)
-        {
-            String str = fornecedor.toString();
-            if (str.length()+4 > maxSize) maxSize = str.length()+4;
-        }
+        int maxSize = 60;
 
         this.o.printLine(maxSize);
         this.o.printMessage("Lista de Fornecedores");
         this.o.printLine(maxSize);
         for (Fornecedor fornecedor : fornecedores)
-            this.o.printMessage(fornecedor.toString());
+            this.o.printMessage(fornecedor.toString() + "\n");
         this.o.printLine(maxSize);
     }
 }

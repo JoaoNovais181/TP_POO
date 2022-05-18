@@ -1,6 +1,7 @@
 package View;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import Model.GesModel;
 
@@ -55,6 +56,11 @@ public class Apresentacao implements Serializable
     public void printMenuFaturacao ()
     {
         this.am.printMenuFaturacao();
+    }
+
+    public void printMenuCriacaoFormula ()
+    {
+        this.am.printMenuCriacaoFormula();
     }
 
     public void printMessage (String message)
@@ -121,7 +127,8 @@ public class Apresentacao implements Serializable
 
     public void printHoraAtual (GesModel g)
     {
-        String hora = g.getHoraAtual().toString();
+        LocalDateTime l = g.getHoraAtual();
+        String hora = (l.getDayOfMonth() + "/" + l.getMonthValue() + "/" + l.getYear() + " " + l.getHour() + ":" + l.getMinute());
         this.o.printLine(hora.length()+2);
         this.o.printMessage(hora);
         this.o.printLine(hora.length()+2);
