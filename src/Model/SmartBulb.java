@@ -9,42 +9,47 @@ public class SmartBulb extends SmartDevice
     public static final int COLD = 0;
     
     private int tone;
+    private int dimensao;
 
     public SmartBulb() {
         super(); // Chamar o construtor de SmartDevice por omissao
         this.tone = NEUTRAL;
     }
 
-    public SmartBulb(String id, boolean on, int tone) {
-        super(id, true);
+    public SmartBulb(String id, boolean on, double consumoEnergeticoHora, int tone, int dimensao) {
+        super(id, true, consumoEnergeticoHora);
         // initialise instance variables
         this.tone = tone;
+        this.dimensao = dimensao;
     }
 
     public SmartBulb(SmartBulb bulb)
     {
-        super(bulb.getID(), bulb.getOn());
+        super(bulb.getID(), bulb.getOn(), bulb.getConsumoEnergeticoHora());
         this.tone = bulb.getTone();
+        this.dimensao = bulb.getDimensao();
     }
 
-    // public SmartBulb(String id, boolean on, int tone, LocalDateTime ultimaFaturacao) {
-        // super(id, true, ultimaFaturacao);
-        // this.tone = tone;
-    // }
-
-    public SmartBulb(String id) {
-        super(id, false); // Chamar o construtor de SmartDevice parametrizado com id
-        this.tone = NEUTRAL;
-    }
-
-    public void setTone(int t) {
+    public void setTone(int t) 
+    {
         if (t>WARM) this.tone = WARM;
         else if (t<COLD) this.tone = COLD;
         else this.tone = t;
     }
 
-    public int getTone() {
+    public int getTone() 
+    {
         return this.tone;
+    }
+
+    public void setDimensao(int dimensao)
+    {
+        this.dimensao = dimensao;
+    }
+
+    public int getDimensao()
+    {
+        return this.dimensao;
     }
 
     public String toString ()
@@ -59,7 +64,7 @@ public class SmartBulb extends SmartDevice
             return -1;
         
         double horas = ChronoUnit.HOURS.between(atual, nova);
-        return (10 + (4 - this.tone - 1) * 3) * horas / 1000;
+        return this.getConsumoEnergeticoHora() * (10 + (4 - this.tone - 1) * 3) * horas / 1000;
     }
 
     @Override

@@ -18,5 +18,17 @@ public class FornecedorTipo1 extends Fornecedor
         s += "consumoTotal * valorBase * (1+imposto)";
         return s + "}";
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this==o) return true;
+
+        if ((o==null) || (o.getClass() != this.getClass())) return false;
+
+        Fornecedor f = (Fornecedor) o;
+
+        return (super.equals(f)) && (o instanceof FornecedorTipo1);
+    }
     
 }

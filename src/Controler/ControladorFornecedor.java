@@ -3,11 +3,14 @@ package Controler;
 import Model.GesModel;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
 
-import Model.Formula;
 import Model.Fornecedor;
+import Model.FornecedorTipo1;
+import Model.FornecedorTipo2;
+import Model.FornecedorTipo3;
+import Model.FornecedorTipo4;
+import Model.FornecedorTipo5;
 import View.Apresentacao;
 
 public class ControladorFornecedor implements Serializable
@@ -17,24 +20,6 @@ public class ControladorFornecedor implements Serializable
     public ControladorFornecedor ()
     {
         this.i = new Input();
-    }
-
-    private boolean VerificaFormula (String formula, Apresentacao a)
-    {
-        String[] tokens = formula.split(" ");
-        boolean foundVB = false, foundI = false, foundC = false;
-        for (String token : tokens)
-        {
-            if (token.contains("valorbase")) foundVB = true;
-            if (token.contains("imposto")) foundI = true;
-            if (token.contains("consumototal")) foundC = true;
-        }
-
-        if (!foundVB) { a.printMessageWLineAbove("Nao introduziu valorbase na formula."); return false; }
-        if (!foundI) { a.printMessageWLineAbove("Nao introduziu imposto na formula."); return false; }
-        if (!foundC) { a.printMessageWLineAbove("Nao introduziu consumototal na formula."); return false; }
-
-        return true;
     }
 
     public String lerFornecedor (GesModel g, Apresentacao a)
@@ -70,66 +55,26 @@ public class ControladorFornecedor implements Serializable
 
         double valorBase = this.i.lerDouble(a, "Introduza o valor base do custo diário do kwh de energia: ", 0);
         double imposto = this.i.lerDouble(a, "Introduza o valor do fator multiplicativo do imposto: ", 0);
+        int tipoFornecedor = (int) this.i.lerDouble(a, "Qual tipo de fornecedor deseja? (1,2,3,4 ou 5)", 1, 5);
 
-        HashMap<Integer,Formula> formulas = this.controladorCriacaoFormula(a);
-
-        Fornecedor f = new Fornecedor(nome, valorBase, imposto, formulas);
+        Fornecedor f = null;
+        switch(tipoFornecedor)
+        {
+            case 1: f = new FornecedorTipo1(nome, valorBase, imposto);
+                    break;
+            case 2: f = new FornecedorTipo2(nome,valorBase, imposto);
+                    break;
+            case 3: f = new FornecedorTipo3(nome,valorBase, imposto);
+                    break;
+            case 4: f = new FornecedorTipo4(nome,valorBase, imposto);
+                    break;
+            case 5: f = new FornecedorTipo5(nome,valorBase, imposto);
+                    break;
+            default: break;
+        }
         g.addFornecedor(f);
         a.printMessageWLineUnder("Fornecedor Criado!");
         return nome;
     }
 
-    private boolean verificaCondicao (int c, int lant, int latu, Apresentacao a)
-    {
-        if (latu<0) { a.printMessage("Limite de dispositivos deve ser >0."); return false; }
-        if (latu==0 && c<1) { a.printMessage("Deve ter pelo menos 1 condicao"); return false; }
-        if (latu!=0 && latu <= lant) { a.printMessage("Limite deve ser maior que o anterior"); return false; }
-        return true;
-    }
-
-    private HashMap<Integer, Formula> controladorCriacaoFormula (Apresentacao a)
-    {
-        HashMap<Integer, Formula> formulas = new HashMap<Integer, Formula>();
-        a.printMenuCriacaoFormula();
-        int opc = (int)this.i.lerDouble(a, "Introduza uma opcao: ", 1, 2);
-
-        if (opc==1)
-        {
-            String formula;
-            do
-            {
-                formula = this.i.lerString(a, "Introduza a formula para o calculo da faturacao: ");
-            } while(!this.VerificaFormula(formula,a));
-            Formula form = new Formula(formula);
-            formulas.put((Integer)0, form);
-            return formulas;
-        }
-
-        int c = 0, lant = -1, latu;
-
-        do 
-        {
-            do 
-            {
-                latu = (int)this.i.lerDouble(a, ("Introduza o numero de dispositivos para a " + (c+1) + "-ésima condicao ou 0 para terminar condicoes."), 0);
-            } while (!this.verificaCondicao(c, lant, latu, a));
-            
-            String formula;
-            do
-            {
-                formula = this.i.lerString(a, "Introduza a formula para o calculo da faturacao: ");
-            } while(!this.VerificaFormula(formula,a));
-            Formula form = new Formula(formula);
-
-            if (latu==0)
-                formulas.put((Integer)(lant+1), form);
-            else
-                formulas.put((Integer)latu, form);
-            lant = latu;
-            c++;
-
-        } while (latu!=0);
-
-        return formulas;
-    }
 }

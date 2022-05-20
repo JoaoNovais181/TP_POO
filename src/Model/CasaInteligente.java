@@ -47,10 +47,11 @@ public class CasaInteligente implements Serializable
         this.nomeProprietario = umaCasaInteligente.getNomeProprietario();
         this.NIFproprietario = umaCasaInteligente.getNIFproprietario();
         this.devices = new HashMap<>();
-        this.devices = (HashMap<String, SmartDevice>) umaCasaInteligente.getDevices().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey() , entry -> entry.getValue().clone()));
+        this.devices = (HashMap<String, SmartDevice>) umaCasaInteligente.getDevices().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey() , entry -> entry.getValue()));
         this.locations = new HashMap<>();   
         this.locations =  (HashMap<String, List<String>>) umaCasaInteligente.getLocations().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry->entry.getValue().stream().collect(Collectors.toList())));
         this.valorUltimaFaturacao = 0;
+        this.fornecedor = umaCasaInteligente.getFornecedor();
         this.faturas = new ArrayList<>();
         this.faturas = umaCasaInteligente.getFaturas();
     }
@@ -91,11 +92,30 @@ public class CasaInteligente implements Serializable
         return this.faturas;
     }
 
+    public CasaInteligente clone ()
+    {
+        return new CasaInteligente(this);
+    }
+
     public String toString ()
     {
         return "CasaInteligente{Nome: " + this.nomeProprietario + ", NIF: " + this.NIFproprietario + "}";
     }
-    
+
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        
+        if ( (o==null) || (this.getClass() != o.getClass()))
+            return false;
+
+        CasaInteligente c = (CasaInteligente) o;
+
+        return (this.nomeProprietario.equals(c.getNomeProprietario())) && (this.NIFproprietario.equals(c.getNIFproprietario())) &&
+                (this.fornecedor.equals(c.getFornecedor())) && (this.devices.equals(c.getDevices())) && (this.locations.equals(c.getLocations())) && 
+                (this.faturas.equals(c.getFaturas())) &&(this.valorUltimaFaturacao == c.getValorUltimaFaturacao());
+    }    
 
     public void mudaFornecedor (Fornecedor novoFornecedor)
     {
@@ -133,9 +153,12 @@ public class CasaInteligente implements Serializable
         this.devices.put(s.getID(), s.clone());
     }
     
-    public SmartDevice getDevice(String s) 
+    public SmartDevice getDevice(String s) throws SmartDeviceNaoExisteException
     {
-        return this.devices.get(s);
+        SmartDevice sd = this.devices.get(s);
+        if (sd == null)
+            throw new SmartDeviceNaoExisteException("Nao existe nenhum SmartDevice com id=" + s + " na casa com NIF=" + this.NIFproprietario);
+        return sd;
     }
     
     public void setOn(String s, boolean b) 

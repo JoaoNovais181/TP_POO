@@ -15,9 +15,9 @@ public class GesModel implements Serializable {
 
     public GesModel ()
     {
-        this.devices = new HashMap<>();
-        this.casas = new HashMap<>();
-        this.fornecedores = new HashMap<>();
+        this.devices = new HashMap<String, SmartDevice>();
+        this.casas = new HashMap<String, CasaInteligente>();
+        this.fornecedores = new HashMap<String, Fornecedor>();
         this.horaAtual = LocalDateTime.now();
     }
 
@@ -43,8 +43,11 @@ public class GesModel implements Serializable {
         this.casas.put(casa.getNIFproprietario(), casa);
     }
 
-    public CasaInteligente getCasa (String NIF)
+    public CasaInteligente getCasa (String NIF) throws CasaNaoExisteException
     {
+        CasaInteligente r = this.casas.get(NIF);
+        if (r == null)
+            throw new CasaNaoExisteException("Nao existe casa no modelo com NIF=" + NIF);
         return this.casas.get(NIF);
     }
 
@@ -60,7 +63,7 @@ public class GesModel implements Serializable {
 
     public List<CasaInteligente> getCasas ()
     {
-        return this.casas.values().stream().collect(Collectors.toList());
+        return this.casas.values().stream().map(c -> c.clone()).collect(Collectors.toList());
     }
 
     public List<String> getNIFCasas ()
@@ -76,9 +79,15 @@ public class GesModel implements Serializable {
         this.devices.put(sd.getID(), sd);
     }
 
-    public SmartDevice getSmartDevice (String id, String NIFproprietario)
+    public SmartDevice getSmartDevice (String id, String NIFproprietario) throws CasaNaoExisteException, SmartDeviceNaoExisteException 
     {
-        return this.casas.get(NIFproprietario).getDevice(id);
+        if (!this.existeCasaInteligente(NIFproprietario))
+            throw new CasaNaoExisteException("Não existe casa no modelo com NIF=" + NIFproprietario);
+        
+        // Se o smartdevice nao existir na casa o metodo sd levanta SmartDeviceNaoExisteException
+        SmartDevice sd = this.casas.get(NIFproprietario).getDevice(id).clone();
+        
+        return sd;
     }
 
     public boolean existeDevice (String id, String NIFproprietario)

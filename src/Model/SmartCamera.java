@@ -15,9 +15,9 @@ public class SmartCamera extends SmartDevice
         this.tamFicheiro = 0;
     }
 
-    public SmartCamera (String id, boolean on, int resX, int resY, double tamFicheiro)
+    public SmartCamera (String id, boolean on, double consumoEnergeticoHora, int resX, int resY, double tamFicheiro)
     {
-        super(id, on);
+        super(id, on, consumoEnergeticoHora);
         this.resX = resX;
         this.resY = resY;
         this.tamFicheiro = tamFicheiro;
@@ -25,7 +25,7 @@ public class SmartCamera extends SmartDevice
 
     public SmartCamera (SmartCamera camera)
     {
-        super(camera.getID(), camera.getOn());
+        super(camera.getID(), camera.getOn(), camera.getConsumoEnergeticoHora());
         this.resX = camera.getResX();
         this.resY = camera.getResY();
         this.tamFicheiro = camera.getTamFicheiro();
@@ -61,7 +61,7 @@ public class SmartCamera extends SmartDevice
             return -1;
         
         double horas = ChronoUnit.HOURS.between(atual, nova);
-        return horas * this.tamFicheiro*8/1000000 * (this.resX * this.resY)/1000000 / 1000;
+        return this.getConsumoEnergeticoHora() * horas * this.tamFicheiro*8/1000000 * (this.resX * this.resY)/1000000 / 1000;
     }
 
     @Override

@@ -53,7 +53,7 @@ public class ControladorSmartDevice implements Serializable
         
         do{
             a.printMenuCor();
-            n = i.lerDouble();
+            n = this.i.lerDouble();
         } while (n < 1 || n > 3);
 
         return (int)n;
@@ -64,13 +64,18 @@ public class ControladorSmartDevice implements Serializable
         String id = null;
         do
         {
-            id = i.lerString(a, "Introduza o ID da SmartBulb:");
+            id = this.i.lerString(a, "Introduza o ID da SmartBulb:");
         } while (g.existeDevice(id));
 
-        boolean on = i.lerSimNao(a, "A SmartBulb está ligada?(S/N)");
+        boolean on = this.i.lerSimNao(a, "A SmartBulb está ligada?(S/N)");
+
+        double consumoEnergeticoHora = this.i.lerDouble(a, "Intrduza um valor para o consumo energético do equipamento por hora:", 0);
+
         int cor = this.lerCor(a);
+
+        int dimensao = (int)this.i.lerDouble(a, "Introduza a dimensao da SmartBulb:", 0);
         
-        SmartBulb sb = new SmartBulb(id, on, cor);
+        SmartBulb sb = new SmartBulb(id, on, consumoEnergeticoHora, cor, dimensao);
         g.addSmartDevice(sb, NIFproprietario, location);
     }
 
@@ -79,15 +84,18 @@ public class ControladorSmartDevice implements Serializable
         String id = null;
         do
         {
-            id = i.lerString(a, "Introduza o ID do SmartSpeaker:");
+            id = this.i.lerString(a, "Introduza o ID do SmartSpeaker:");
         } while (g.existeDevice(id));
 
-        boolean on = i.lerSimNao(a, "O SmartSpeaker está ligado?(S/N)");
+        boolean on = this.i.lerSimNao(a, "O SmartSpeaker está ligado?(S/N)");
 
-        String channel = i.lerString(a, "Introduza o canal da coluna: ");
-        int volume = (int)i.lerDouble(a, "Introduza o volume (0-20): ", 0, 20);
+        double consumoEnergeticoHora = this.i.lerDouble(a, "Intrduza um valor para o consumo energético do equipamento por hora:", 0);
+
+        String channel = this.i.lerString(a, "Introduza o canal da coluna: ");
+        int volume = (int)this.i.lerDouble(a, "Introduza o volume (0-20): ", 0, 20);
+        String marca = this.i.lerString(a, "Introduza a marca da coluna: ");
         
-        SmartSpeaker ss = new SmartSpeaker(id, on, channel, volume);
+        SmartSpeaker ss = new SmartSpeaker(id, on, consumoEnergeticoHora, channel, marca, volume);
         g.addSmartDevice(ss, NIFproprietario, location);
     }
 
@@ -96,15 +104,17 @@ public class ControladorSmartDevice implements Serializable
         String id = null;
         do
         {
-            id = i.lerString(a, "Introduza o ID da SmartCamera:");
+            id = this.i.lerString(a, "Introduza o ID da SmartCamera:");
         } while (g.existeDevice(id));
     
-        boolean on = i.lerSimNao(a, "A SmartCamera está ligada?(S/N)");
+        boolean on = this.i.lerSimNao(a, "A SmartCamera está ligada?(S/N)");
         
-        int resX = (int)i.lerDouble(a, "Introduza a resolução horizontal:", 0), resY = (int)i.lerDouble(a, "Introduza a resolução Vertical:", 0);
-        double tamFicheiro = i.lerDouble(a, "Introduza o tamanho do ficheiro: ", 0);
+        double consumoEnergeticoHora = this.i.lerDouble(a, "Intrduza um valor para o consumo energético do equipamento por hora:", 0);
 
-        SmartCamera sc = new SmartCamera(id, on, resX, resY, tamFicheiro);
+        int resX = (int)this.i.lerDouble(a, "Introduza a resolução horizontal:", 0), resY = (int)i.lerDouble(a, "Introduza a resolução Vertical:", 0);
+        double tamFicheiro = this.i.lerDouble(a, "Introduza o tamanho do ficheiro: ", 0);
+
+        SmartCamera sc = new SmartCamera(id, on, consumoEnergeticoHora, resX, resY, tamFicheiro);
         g.addSmartDevice(sc, NIFproprietario, location);
     }
 

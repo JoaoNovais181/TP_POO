@@ -7,6 +7,7 @@ public abstract class SmartDevice implements Serializable
 
     private String id;
     private boolean on;
+    private double consumoEnergeticoHora;
     // private LocalDateTime ultimaFaturacao;
 
     public SmartDevice() {
@@ -15,15 +16,17 @@ public abstract class SmartDevice implements Serializable
         // this.ultimaFaturacao = LocalDateTime.now();
     }
 
-    public SmartDevice(String s) {
+    public SmartDevice(String s, double consumoEnergeticoHora) {
         this.id = s;
         this.on = false;
+        this.consumoEnergeticoHora = consumoEnergeticoHora;
         // this.ultimaFaturacao = LocalDateTime.now();
     }
 
-    public SmartDevice(String s, boolean b) {
+    public SmartDevice(String s, boolean b, double consumoEnergeticoHora) {
         this.id = s;
         this.on = b;
+        this.consumoEnergeticoHora = consumoEnergeticoHora;
         // this.ultimaFaturacao = LocalDateTime.now();
     }
 
@@ -53,11 +56,25 @@ public abstract class SmartDevice implements Serializable
 
     // public LocalDateTime getUltimaFaturacao () {return this.ultimaFaturacao;}
     
-    public boolean getOn() {return this.on;}
+    public boolean getOn() 
+    {
+        return this.on;
+    }
     
-    public void setOn(boolean b) {this.on=b;}
+    public void setOn(boolean b) 
+    {
+        this.on=b;
+    }
     
-    public String getID() {return this.id;}
+    public String getID() 
+    {
+        return this.id;
+    }
+
+    public double getConsumoEnergeticoHora () 
+    {
+        return this.consumoEnergeticoHora;
+    }
 
     public abstract String toString();
 

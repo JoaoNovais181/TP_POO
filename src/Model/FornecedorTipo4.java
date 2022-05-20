@@ -18,10 +18,21 @@ public class FornecedorTipo4 extends Fornecedor
     @Override
     public String toString() {
         String s = "Fornecedor{ nome: " + this.getNome() + ", valor base=" + this.getValorBase() + ", imposto=" + this.getImposto() + "\nformula= ";
-        s += "\nse nº dispositivos < 5:\n\t 0.65 * consumoTotal * valorBase * (1+imposto)";
-        s += "\nse nº dispositivos < 10:\n\t 0.8 consumoTotal * valorBase * (1+imposto)";
-        s += "\nse nº dispositivos >= 10:\n\t 0.95 consumoTotal * valorBase * (1+imposto)";
+        s += "\nse nº dispositivos < 10:\n\t consumoTotal * valorBase * (1+ (0.6 * imposto))";
+        s += "\nse nº dispositivos >= 10:\n\t consumoTotal * valorBase * (1+imposto)";
         return s + "}";
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this==o) return true;
+
+        if ((o==null) || (o.getClass() != this.getClass())) return false;
+
+        Fornecedor f = (Fornecedor) o;
+
+        return (super.equals(f)) && (o instanceof FornecedorTipo4);
     }
     
 }

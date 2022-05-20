@@ -16,6 +16,7 @@ public abstract class Fornecedor implements Serializable
         this.nome = nome;
         this.valorBase = valorBase;
         this.imposto = imposto;
+        this.casas = new HashMap<>();
     }
 
     public String getNome ()
@@ -31,6 +32,16 @@ public abstract class Fornecedor implements Serializable
     public double getImposto ()
     {
         return this.imposto;
+    }
+
+    public void setValorBase (double valorBase)
+    {
+        this.valorBase = valorBase;
+    }
+
+    public void setImposto (double imposto)
+    {
+        this.imposto = imposto;
     }
 
     public HashMap<String, CasaInteligente> getCasas ()
@@ -51,22 +62,33 @@ public abstract class Fornecedor implements Serializable
     public abstract double faturacao (double consumoTotal, int numeroDispositivos);
 
     public abstract String toString(); 
+
+    public boolean equals (Object o)
+    {
+        if (this==o) return true;
+
+        if ((o==null) || (o.getClass() != this.getClass())) return false;
+
+        Fornecedor f = (Fornecedor) o;
+        return (this.valorBase == f.getValorBase()) && (this.imposto == f.getImposto()) && (this.nome.equals(f.getNome())) &&
+                this.casas.equals(f.getCasas());
+    }
     // {
-        // String s = "Fornecedor{ nome: " + this.nome + ", valor base=" + this.getValorBase() + ", imposto=" + this.getImposto() + "\nformula= ";
-        // int nForms = this.formulas.size(), i=0;
-        // if (nForms > 1)
-        // {
-            // for (Map.Entry<Integer,Formula> formula : this.formulas.entrySet())
+            // String s = "Fornecedor{ nome: " + this.nome + ", valor base=" + this.getValorBase() + ", imposto=" + this.getImposto() + "\nformula= ";
+            // int nForms = this.formulas.size(), i=0;
+            // if (nForms > 1)
             // {
-                // if (i++<nForms-1)
-                    // s += "\nse nº dispositivos <= " + formula.getKey() + ":\n\t" + formula.getValue();
-                // else
-                    // s += "\nse nº dispositivos > " + (formula.getKey()-1) + ":\n\t" + formula.getValue();
+                // for (Map.Entry<Integer,Formula> formula : this.formulas.entrySet())
+                // {
+                    // if (i++<nForms-1)
+                        // s += "\nse nº dispositivos <= " + formula.getKey() + ":\n\t" + formula.getValue();
+                    // else
+                        // s += "\nse nº dispositivos > " + (formula.getKey()-1) + ":\n\t" + formula.getValue();
+                // }
             // }
-        // }
-        // else
-            // s += this.formulas.get(0).toString();
-        // return s + "}";
+            // else
+                // s += this.formulas.get(0).toString();
+            // return s + "}";
     // }
 
 }
