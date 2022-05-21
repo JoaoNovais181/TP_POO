@@ -1,11 +1,15 @@
 package Controler;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import Model.CasaNaoExisteException;
 import Model.GesModel;
 import Model.SmartBulb;
 import Model.SmartSpeaker;
 import Model.SmartCamera;
+import Model.SmartDevice;
 import View.Apresentacao;
 
 public class ControladorSmartDevice implements Serializable
@@ -18,7 +22,24 @@ public class ControladorSmartDevice implements Serializable
         this.i = new Input();
     }
 
-    public void controladorCriacaoSmartDevice (GesModel g, Apresentacao a, ControladorCasa ca, ControladorFornecedor cf)
+    public String lerDevice (GesModel g, Apresentacao a)
+    {
+        List<SmartDevice> l = g.getDevices();
+        if (l.size()==0) 
+        {
+            a.printMessageWLineAbove("Não Existem SmartDevices!");
+            return null;
+        }
+        a.selecaoDevices(l.stream().map(SmartDevice::getID).collect(Collectors.toList()));
+        int op;
+        do
+        {
+            op = (int) this.i.lerDouble(a, "Introduza uma opcao:", 0);
+        } while (!(op>0 && op<=l.size()));
+        return l.get(op-1).getID();
+    }
+
+    public void controladorCriacaoSmartDevice (GesModel g, Apresentacao a, ControladorCasa ca, ControladorFornecedor cf) throws CasaNaoExisteException
     {
         String nifCasa = ca.lerCasa(g, a);
         if (nifCasa == null)

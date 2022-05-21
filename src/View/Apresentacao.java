@@ -3,6 +3,8 @@ package View;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import Model.Fatura;
 import Model.GesModel;
 
 public class Apresentacao implements Serializable
@@ -124,6 +126,12 @@ public class Apresentacao implements Serializable
         this.ac.listarFaturas(g.getFaturas());
     }
 
+    public void listarFaturas (List<Fatura> faturas)
+    {
+        this.ac.listarFaturas(faturas);
+    }
+
+
 
     public void printHoraAtual (GesModel g)
     {
@@ -134,8 +142,33 @@ public class Apresentacao implements Serializable
         this.o.printLine(hora.length()+2);
     }
 
+    public void printMenuMudancas ()
+    {
+        this.am.printMenuMudancas();
+    }
+
+    public void printMenuMudancasFornecedor()
+    {
+        this.am.printMenuMudancasFornecedor();
+    }
+
+    public void selecaoDevices (List<String> devices)
+    {
+        this.asd.selecaoDevices(devices);
+    }
+
     public void clear()
     {
         this.o.clear();
+    }
+
+    public void printMenuEstatisticas ()
+    {
+        this.am.printMenuEstatisticas();
+    }
+
+    public void printMaisConsumidoras (List<String> l)
+    {
+        this.ac.printMaisConsumidoras(l);
     }
 }

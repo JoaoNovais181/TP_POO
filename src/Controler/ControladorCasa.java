@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import Model.CasaInteligente;
+import Model.CasaNaoExisteException;
 import Model.Fornecedor;
 import Model.GesModel;
 import View.Apresentacao;
@@ -36,9 +37,12 @@ public class ControladorCasa implements Serializable
             return null;
         }
         a.printMenuSelecaoCasa(l);
-        int op = (int)this.i.lerDouble(a, "Introduza uma opcao", 0);
-        if (op>0) return l.get(op-1);
-        return null;
+        int op;
+        do
+        {
+            op = (int)this.i.lerDouble(a, "Introduza uma opcao", 0);
+        } while (!(op>0 && op<=l.size()));
+        return l.get(op-1);
     }
 
     private boolean verificaLocation (Apresentacao a, List<String> locations, String sala)
@@ -49,9 +53,16 @@ public class ControladorCasa implements Serializable
         return r;
     }
 
-    public String lerLocation (GesModel g, Apresentacao a, String nif)
+    public String lerLocation (GesModel g, Apresentacao a, String nif) throws CasaNaoExisteException
     {
-        CasaInteligente c = g.getCasa(nif);
+        CasaInteligente c;
+        try {
+            c = g.getCasa(nif);
+        } catch (CasaNaoExisteException e) {
+            e.printStackTrace();
+            throw e;
+        }
+
         List<String> l = c.getLocations().keySet().stream().collect(Collectors.toList());
         int op;
         if (l.size() == 0)
@@ -85,7 +96,7 @@ public class ControladorCasa implements Serializable
         System.out.println(" 0 ) Criar nova");
     }
 
-    public void listarSalas (GesModel g, Apresentacao a, String nif)
+    public void listarSalas (GesModel g, Apresentacao a, String nif) throws CasaNaoExisteException
     {
         CasaInteligente c = g.getCasa(nif);
         int i=1;

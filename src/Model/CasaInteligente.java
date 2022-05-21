@@ -18,7 +18,7 @@ public class CasaInteligente implements Serializable
     private HashMap<String, List<String>> locations; // Espaço -> Lista codigo dos devices
     // private Map<String, Map <String, SmartDevice>> devices; 
     private Fornecedor fornecedor;
-    private double valorUltimaFaturacao;
+    private double valorTotalFaturacao;
     private List<Fatura> faturas;
 
     public CasaInteligente() {
@@ -27,7 +27,7 @@ public class CasaInteligente implements Serializable
         this.devices = new HashMap<>();
         this.locations = new HashMap<>();
         this.fornecedor = null;
-        this.valorUltimaFaturacao = 0;
+        this.valorTotalFaturacao = -1;
         this.faturas = new ArrayList<>();
     }
 
@@ -38,7 +38,7 @@ public class CasaInteligente implements Serializable
         this.locations = new HashMap<>();
         this.fornecedor = fornecedor;
         fornecedor.addCasa(this);
-        this.valorUltimaFaturacao = 0;
+        this.valorTotalFaturacao = -1;
         this.faturas = new ArrayList<>();
     }
 
@@ -47,10 +47,10 @@ public class CasaInteligente implements Serializable
         this.nomeProprietario = umaCasaInteligente.getNomeProprietario();
         this.NIFproprietario = umaCasaInteligente.getNIFproprietario();
         this.devices = new HashMap<>();
-        this.devices = (HashMap<String, SmartDevice>) umaCasaInteligente.getDevices().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey() , entry -> entry.getValue()));
+        this.devices = (HashMap<String, SmartDevice>) umaCasaInteligente.getDevices().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey() , entry -> entry.getValue().clone()));
         this.locations = new HashMap<>();   
         this.locations =  (HashMap<String, List<String>>) umaCasaInteligente.getLocations().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry->entry.getValue().stream().collect(Collectors.toList())));
-        this.valorUltimaFaturacao = 0;
+        this.valorTotalFaturacao = -1;
         this.fornecedor = umaCasaInteligente.getFornecedor();
         this.faturas = new ArrayList<>();
         this.faturas = umaCasaInteligente.getFaturas();
@@ -82,9 +82,9 @@ public class CasaInteligente implements Serializable
         return this.fornecedor;
     }
 
-    public double getValorUltimaFaturacao ()
+    public double getValorTotalFaturacao ()
     {
-        return this.valorUltimaFaturacao;
+        return this.valorTotalFaturacao;
     }
 
     public List<Fatura> getFaturas ()
@@ -99,7 +99,12 @@ public class CasaInteligente implements Serializable
 
     public String toString ()
     {
-        return "CasaInteligente{Nome: " + this.nomeProprietario + ", NIF: " + this.NIFproprietario + "}";
+        return "CasaInteligente{Nome: " + this.nomeProprietario + ", NIF: " + this.NIFproprietario + ", Fornecedor: " + this.fornecedor.getNome() + "}";
+    }
+
+    public void clearFaturas ()
+    {
+        this.faturas.clear();
     }
 
     public boolean equals(Object o)
@@ -114,7 +119,7 @@ public class CasaInteligente implements Serializable
 
         return (this.nomeProprietario.equals(c.getNomeProprietario())) && (this.NIFproprietario.equals(c.getNIFproprietario())) &&
                 (this.fornecedor.equals(c.getFornecedor())) && (this.devices.equals(c.getDevices())) && (this.locations.equals(c.getLocations())) && 
-                (this.faturas.equals(c.getFaturas())) &&(this.valorUltimaFaturacao == c.getValorUltimaFaturacao());
+                (this.faturas.equals(c.getFaturas())) &&(this.valorTotalFaturacao == c.getValorTotalFaturacao());
     }    
 
     public void mudaFornecedor (Fornecedor novoFornecedor)
@@ -133,10 +138,23 @@ public class CasaInteligente implements Serializable
     {
         double consumo = this.calculaCosumo(atual, nova);
         double faturacao = this.fornecedor.faturacao(consumo, this.devices.size());
-        this.valorUltimaFaturacao = faturacao;
+        this.valorTotalFaturacao += faturacao;
         Fatura fatura = new Fatura(this.nomeProprietario, this.NIFproprietario, atual, nova, consumo, faturacao);
         this.faturas.add(fatura);
         return faturacao;
+    }
+
+    public double getConsumoEntre (LocalDateTime li, LocalDateTime ls)
+    {
+        double consumo = 0;
+
+        for (Fatura fatura : this.faturas)
+        {
+            if (fatura.getInicio().isAfter(li) && fatura.getFim().isBefore(ls))
+                consumo += fatura.getConsumo();
+        }
+
+        return consumo;
     }
 
     public void setDeviceOn(String devCode) {

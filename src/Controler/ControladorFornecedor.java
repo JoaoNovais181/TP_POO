@@ -36,6 +36,23 @@ public class ControladorFornecedor implements Serializable
         return this.criarFornecedor(g, a);
     }
 
+    public String lerFornecedor2 (GesModel g, Apresentacao a)
+    {
+        List<String> l = g.getNomeFornecedores();
+        if (l.size() == 0)
+        {
+            a.printMessageWLineAbove("Não há fornecedores!");
+            return this.criarFornecedor(g,a);
+        }
+        a.printMenuSelecaoFornecedor(l);
+        int op;
+        do
+        {
+            op = (int)this.i.lerDouble(a, "Selecao: ", 0, g.getNumFornecedores());
+        } while (!(op>0 && op<=l.size()));
+        return l.get(op-1);
+    }
+
     private boolean verificaFornecedor (GesModel g, Apresentacao a, String nome)
     {
         boolean r = g.existeFornecedor(nome);

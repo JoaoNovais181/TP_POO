@@ -2,6 +2,7 @@ package View;
 
 import java.io.Serializable;
 import java.util.List;
+
 import Model.CasaInteligente;
 import Model.Fatura;
 
@@ -68,4 +69,21 @@ public class ApresentacaoCasaInteligente implements Serializable
         this.o.printMessage(" 0 ) Voltar ");
         this.o.printLine(maxSize);
     }
+
+    public void printMaisConsumidoras (List<String> l)
+    {
+        String message = "Casas Mais Consumidoras";
+        int maxSize = message.length()+6;
+        
+        this.o.printLine(maxSize);
+        System.out.println(message);
+        this.o.printLine(maxSize);
+
+        for (String s : l)
+            this.o.printMessage(s);
+
+        this.o.printMessage(" 0 ) Voltar ");
+        this.o.printLine(maxSize);
+    }
+
 }

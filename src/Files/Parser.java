@@ -38,12 +38,12 @@ public class Parser implements Serializable
                 do
                 {
                     valorBase = r.nextDouble();
-                } while(valorBase<=0);
+                } while(valorBase<=0.3);
                 double imposto;
                 do
                 {
                     imposto = r.nextDouble();
-                } while(imposto<=0);
+                } while(!(imposto>0 && imposto<0.5));
                 Fornecedor f = null;
                 switch (tipo)
                 {

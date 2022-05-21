@@ -49,4 +49,9 @@ public class ApresentacaoSmartDevice implements Serializable
             this.o.printMessage(device.toString());
         this.o.printLine(maxSize);
     }
+
+    public void selecaoDevices (List<String> devices)
+    {
+        this.o.printList(devices, "Selecione um SmartDevice", 1);
+    }
 }

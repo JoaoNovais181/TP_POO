@@ -1,5 +1,7 @@
 package Model;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.io.Serializable;
@@ -44,6 +46,28 @@ public abstract class Fornecedor implements Serializable
         this.imposto = imposto;
     }
 
+    public double getVolumeFaturacao ()
+    {
+        double v = 0;
+
+        for (CasaInteligente casa : this.casas.values())
+            v += casa.getValorTotalFaturacao();
+
+        return v;
+    }
+
+    public List<Fatura> getFaturas ()
+    {
+        List<Fatura> v = new ArrayList<Fatura>();
+
+        for (CasaInteligente casa : this.casas.values())
+            v.addAll(casa.getFaturas());
+
+        return v;
+    }
+
+
+
     public HashMap<String, CasaInteligente> getCasas ()
     {
         return (HashMap<String, CasaInteligente>) this.casas.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry->entry.getValue()));
@@ -62,6 +86,8 @@ public abstract class Fornecedor implements Serializable
     public abstract double faturacao (double consumoTotal, int numeroDispositivos);
 
     public abstract String toString(); 
+
+    public abstract Fornecedor clone();
 
     public boolean equals (Object o)
     {

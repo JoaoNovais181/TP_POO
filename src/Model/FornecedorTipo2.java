@@ -7,6 +7,12 @@ public class FornecedorTipo2 extends Fornecedor
         super(nome, valorBase, imposto);
     }
 
+    public FornecedorTipo2(Fornecedor f)
+    {
+        super(f.getNome(), f.getValorBase(), f.getImposto());
+    }
+
+
     @Override
     public double faturacao(double consumoTotal, int numeroDispositivos) {
         return ((numeroDispositivos>20) ?1 : 0.75) * (consumoTotal * this.getValorBase()) * (1+this.getImposto());
@@ -31,5 +37,12 @@ public class FornecedorTipo2 extends Fornecedor
 
         return (super.equals(f)) && (o instanceof FornecedorTipo2);
     }
+
+    @Override
+    public Fornecedor clone() 
+    {
+        return new FornecedorTipo2(this);
+    }
+    
     
 }
